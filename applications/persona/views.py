@@ -15,6 +15,7 @@ from .serializer import *
 
 from django.views.generic import ListView
 
+#Generic API Views
 class ListaPersonas(ListView):
     template_name = 'persona/personas.html'
     context_object_name = 'personas'
@@ -52,3 +53,9 @@ class PersonaDeleteApi(DestroyAPIView):
     serializer_class = PersonSerializer
     def get_queryset(self):
         return Person.objects.all()
+    
+    #Custome Serializer
+class PersonaListApiCustom(ListAPIView):
+    serializer_class = PersonaSerializer
+    def get_queryset(self):
+        return Person.objects.all()    

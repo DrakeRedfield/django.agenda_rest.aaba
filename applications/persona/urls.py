@@ -41,4 +41,9 @@ urlpatterns = [
         views.PersonaDeleteApi.as_view(),
         name="personas"
     ),
+    path(
+        'api/v2/personas/',
+        views.PersonaListApiCustom.as_view(),
+        name="personas"
+    ),
 ]
