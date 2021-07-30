@@ -3,6 +3,8 @@ from model_utils.models import TimeStampedModel
 #
 from django.db import models
 
+from .managers import *
+
 class Hobby(TimeStampedModel):
     name = models.CharField(
         'Pasatiempo',
@@ -58,6 +60,8 @@ class Meet(TimeStampedModel):
         'Asunto',
         max_length = 100
     )
+
+    objects = ReunionMagager()
     
     class Meta:
         verbose_name = 'Meeting'

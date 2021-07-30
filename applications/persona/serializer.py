@@ -1,7 +1,24 @@
-from rest_framework import serializers
+from rest_framework import serializers, pagination
 from .models import *
 
+#Hobbies
+class HobbySerializer(serializers.ModelSerializer):
+    class Meta():
+        model = Hobby
+        fields = (
+            '__all__'
+        )
+
+#Persona
 class PersonSerializer(serializers.ModelSerializer):
+    class Meta():
+        model = Person
+        fields = (
+            '__all__'
+        )
+
+class PersonSerializer2(serializers.ModelSerializer):
+    hobbies = HobbySerializer(many = True)
     class Meta():
         model = Person
         fields = (
@@ -9,6 +26,8 @@ class PersonSerializer(serializers.ModelSerializer):
             'full_name',
             'job',
             'email',
+            'phone',
+            'hobbies'
         )
 
 class PersonaSerializer(serializers.Serializer):
@@ -18,3 +37,50 @@ class PersonaSerializer(serializers.Serializer):
     email = serializers.EmailField()
     phone = serializers.CharField()
     activo = serializers.BooleanField(required = False)
+
+class PersonPagination(pagination.PageNumberPagination):
+    page_size = 5
+    max_page_size = 100
+
+#Meeting
+class MeetSerializer(serializers.ModelSerializer):
+
+    # persona = PersonSerializer()
+    fecha_hora = serializers.SerializerMethodField()
+
+    class Meta():
+        model = Meet
+        fields = (
+            'id',
+            'asunto',
+            'persona',
+            'fecha_hora'
+        )
+
+    def get_fecha_hora(self, obj):
+        return str(obj.fecha) + ' ' + str(obj.hora)
+
+class MeetSerializerLink(serializers.HyperlinkedModelSerializer):
+    fecha_hora = serializers.SerializerMethodField()
+
+    class Meta():
+        model = Meet
+        fields = (
+            'id',
+            'asunto',
+            'persona',
+            'fecha_hora'
+        )
+        extra_kwargs = {
+            'persona': {
+                'view_name': 'persona_app:get_person_api1',
+                'lookup_field': 'pk'
+            }
+        }
+
+    def get_fecha_hora(self, obj):
+        return str(obj.fecha) + ' ' + str(obj.hora)
+
+class MeetByJobSerializer(serializers.Serializer):
+    persona__job = serializers.CharField()
+    cantidad = serializers.IntegerField()

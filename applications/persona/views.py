@@ -26,6 +26,7 @@ class ListaPersonas(ListView):
 
 class PersonaListApi(ListAPIView):
     serializer_class = PersonSerializer
+    pagination_class = PersonPagination
     def get_queryset(self):
         return Person.objects.all()
 
@@ -57,5 +58,31 @@ class PersonaDeleteApi(DestroyAPIView):
     #Custome Serializer
 class PersonaListApiCustom(ListAPIView):
     serializer_class = PersonaSerializer
+    pagination_class = PersonPagination
     def get_queryset(self):
-        return Person.objects.all()    
+        return Person.objects.all()
+
+class PersonaListApiCustom2(ListAPIView):
+    serializer_class = PersonSerializer2
+    pagination_class = PersonPagination
+    def get_queryset(self):
+        return Person.objects.all()
+
+#Meeting Api Views
+class MeetingListApiCustom(ListAPIView):
+    serializer_class = MeetSerializer
+    pagination_class = PersonPagination
+    def get_queryset(self):
+        return Meet.objects.all()
+
+class MeetingByPersonJobListApiCustom(ListAPIView):
+    serializer_class = MeetByJobSerializer
+    pagination_class = PersonPagination
+    def get_queryset(self):
+        return Meet.objects.cantidad_reuniones_job()
+
+class MeetingListApiCustom2(ListAPIView):
+    serializer_class = MeetSerializerLink
+    pagination_class = PersonPagination
+    def get_queryset(self):
+        return Meet.objects.all()
